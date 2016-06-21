@@ -1,0 +1,84 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../elasticsearch/elasticsearch.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../elastic-delete.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="elastic-delete-fixture">
+      <template>
+        <elastic-delete index="mockads" elastic-type="ad"
+          results="{{data}}" error="{{error}}">
+        </elastic-delete>
+      </template>
+    </test-fixture>
+
+    <script>
+      var esDelete;
+
+      suite('<elastic-delete>', function() {
+        setup(function() {
+          esDelete = fixture('elastic-delete-fixture');
+          esDelete.client = new elasticsearch.Client({host: 'http://localhost:9200'});
+        });
+
+        test('defines index property', function () {
+          assert.equal(esDelete.index, 'mockads');
+        });
+
+        test('defines elastic-type property', function() {
+          assert.deepEqual(esDelete.elasticType, 'ad');
+        });
+
+        test('performs delete', function (done) {
+          esDelete.client.create({
+            index: 'mockads',
+            type: 'ad',
+            id: '5001',
+            body: {doc: {title: 'elastic-delete-test'}}
+          }).then(function(results) {
+            esDelete.addEventListener('results-changed', function (event) {
+              assert.isTrue(esDelete.results.found);
+              assert.equal(esDelete.results._index, esDelete.index);
+              assert.equal(esDelete.results._type, esDelete.elasticType);
+              assert.equal(esDelete.results._id, esDelete.id);
+              assert.isUndefined(esDelete.lastError);
+              done();
+            });
+
+            esDelete.id = '5001';
+          });
+        });
+
+        test('persists error to lastError', function (done) {
+          esDelete.addEventListener('last-error-changed', function (event) {
+            assert.equal(esDelete.id, esDelete.id);
+            assert.isDefined(esDelete.lastError);
+            done();
+          });
+
+          esDelete.id = '5001';
+        });
+      });
+    </script>
+
+  </body>
+</html>

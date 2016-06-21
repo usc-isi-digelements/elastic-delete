@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+
+        Element providing a way to delete a single elasticsearch document based on an _id. 
+
+        Example:
+
+        <elastic-client
+            config='{"host": "http://localhost:9200"}'
+            client="{{esclient}}"
+            cluster-status="{{my-status}}">
+        </elastic-client>
+
+        <elastic-delete
+            client="[[esclient]]"
+            index="mockads"
+            id="4"
+            elastic-type="ad"
+            results="{{data}}"
+            lastError="{{error}}">
+        </elastic-delete>
+
+@demo demo/index.html
+
+-->
+
+<script>
+
+  Polymer({
+
+    is: 'elastic-delete',
+
+    properties: {
+        /**
+         * an instance of elasticsearch.Client which is connected to
+         * an elasticsearch server
+         */
+        client: {
+            type: Object
+        },
+
+        /**
+         * the elastic index (database name)
+         */
+        index: {
+            type: String
+        },
+
+        /**
+         * the type of the elasticsearch record to delete
+         */
+        elasticType: {
+            type: String
+        },
+
+        /**
+         * _id of elasticsearch record to delete
+         */
+        id: {
+          type: String
+        },
+
+        /**
+         * result after a successful update, including current version number
+         *
+         */
+        results: {
+            type: Object,
+            notify: true,
+            readOnly: true,
+            value: null
+        },
+
+        /**
+         * either null or an error object that was returned from elastic search server.
+         */
+        lastError: {
+            type: Object,
+            notify: true,
+            readOnly: true
+        }
+    },
+    observers: [
+        'delete(id, elasticType, client, index)'
+    ],
+    /**
+    * Perform delete on elasticsearch record based on inputs.
+    * Will set results or error property depending on outcome.
+    */
+    delete: function() {
+        var self = this;
+
+        self.client.delete({
+            index: self.index,
+            id: self.id,
+            type: self.elasticType
+        }).then(function(results) {
+            self._setResults(results);
+            self._setLastError(null);
+        }).catch(function(err) {
+            self._setLastError(err);
+        });
+    }
+
+  });
+
+</script>
