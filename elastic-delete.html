@@ -12,24 +12,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--
 
-        Element providing a way to delete a single elasticsearch document based on an _id. 
+Element providing a way to delete a single elasticsearch document based on an _id. 
 
-        Example:
+Example:
 
-        <elastic-client
-            config='{"host": "http://localhost:9200"}'
-            client="{{esclient}}"
-            cluster-status="{{my-status}}">
-        </elastic-client>
+    <elastic-client
+        config='{"host": "http://localhost:9200"}'
+        client="{{esclient}}"
+        cluster-status="{{my-status}}">
+    </elastic-client>
 
-        <elastic-delete
-            client="[[esclient]]"
-            index="mockads"
-            id="4"
-            elastic-type="ad"
-            results="{{data}}"
-            lastError="{{error}}">
-        </elastic-delete>
+    <elastic-delete
+        client="[[esclient]]"
+        index="mockads"
+        id="4"
+        elastic-type="ad"
+        results="{{data}}"
+        lastError="{{error}}">
+    </elastic-delete>
 
 @demo demo/index.html
 

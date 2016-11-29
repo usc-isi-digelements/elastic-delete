@@ -10,7 +10,10 @@
     <link rel="import" href="../elastic-delete.html">
   </head>
   <body unresolved>
-    <template is="dom-bind">
+    <template is="dom-bind" id="demo">
+
+      <p>ID of record to delete in mockads index: 4</p>
+
       <elastic-client
         config='{"host": "http://localhost:9200"}'
         client="{{esclient}}"
@@ -22,12 +25,23 @@
         index="mockads"
         id="4"
         elastic-type="ad"
-        results="{{data}}" 
-        lastError="{{error}}"> 
+        results="{{data}}"
+        lastError="{{error}}">
       </elastic-delete>
 
-      <h4>Record info after delete on mockads index:</h4>
-      <p>ID of record deleted: {{data._id}}</p>
+      <p>
+        Record info after delete (note that if demo was previously run, record might
+        already be deleted and the result here will be null): {{stringify(data)}}
+      </p>
     </template>
+    <script>
+      (function(document) {
+        var demo = document.querySelector('#demo');
+
+        demo.stringify = function(json) {
+          return JSON.stringify(json);
+        };
+      })(document);
+    </script>
   </body>
 </html>
