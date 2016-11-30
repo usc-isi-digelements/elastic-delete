@@ -1,8 +1,8 @@
 {
   "name": "elastic-delete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
-    "Thomas Schellenberg"
+    "Next Century Corporation"
   ],
   "description": "Element providing a way to delete a single elasticsearch document based on an _id. ",
   "keywords": [
