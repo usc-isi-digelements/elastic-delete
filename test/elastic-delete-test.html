@@ -70,8 +70,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         test('persists error to lastError', function (done) {
           esDelete.addEventListener('last-error-changed', function (event) {
-            assert.equal(esDelete.id, esDelete.id);
             assert.isDefined(esDelete.lastError);
+            assert.equal(esDelete.lastError.body._id, esDelete.id);
+            assert.isFalse(esDelete.lastError.body.found);
+            assert.deepEqual(esDelete.lastError.status, 404);
+            assert.deepEqual(esDelete.lastError.displayName, 'NotFound');
+            assert.deepEqual(esDelete.lastError.message, 'Not Found');
             done();
           });
 
