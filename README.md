@@ -33,5 +33,5 @@ Then, go ahead and download the element's dependencies:
 
     bower install
 
-To run the demo, you will need a local elasticsearch instance and the 
+To run the demo and unit tests, you will need a local elasticsearch instance and the 
 mockads data referenced in the elastic-client-search repo.
