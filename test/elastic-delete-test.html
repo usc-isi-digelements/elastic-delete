@@ -48,6 +48,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.deepEqual(esDelete.elasticType, 'ad');
         });
 
+        test('does not have html content', function(done) {
+          flush(function() {
+            assert.deepEqual(Polymer.dom(esDelete.root).children.length, 0);
+            done();
+          });
+        });
+
         test('performs delete', function (done) {
           esDelete.client.create({
             index: 'mockads',
