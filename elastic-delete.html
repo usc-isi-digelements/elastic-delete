@@ -1,79 +1,85 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../polymer/polymer.html">
 
 <!--
+A Polymer Element providing a way to delete a single elasticsearch document based on an _id.
 
-Element providing a way to delete a single elasticsearch document based on an _id. 
+### Example
+```html
+<elastic-client
+  config='{"host": "http://localhost:9200"}'
+  client="{{esclient}}"
+  cluster-status="{{my-status}}">
+</elastic-client>
 
-Example:
-
-    <elastic-client
-        config='{"host": "http://localhost:9200"}'
-        client="{{esclient}}"
-        cluster-status="{{my-status}}">
-    </elastic-client>
-
-    <elastic-delete
-        client="[[esclient]]"
-        index="mockads"
-        id="4"
-        elastic-type="ad"
-        results="{{data}}"
-        lastError="{{error}}">
-    </elastic-delete>
+<elastic-delete
+  client="[[esclient]]"
+  index="mockads"
+  id="4"
+  elastic-type="ad"
+  results="{{data}}"
+  lastError="{{error}}">
+</elastic-delete>
+```
 
 @demo demo/index.html
-
 -->
 
 <script>
-
   Polymer({
-
     is: 'elastic-delete',
 
     properties: {
         /**
-         * an instance of elasticsearch.Client which is connected to
-         * an elasticsearch server
+         * (Required)
+         *
+         * An instance of elasticsearch.Client which is connected to an elasticsearch server.
+         *
+         * @type {Object}
          */
         client: {
             type: Object
         },
 
         /**
-         * the elastic index (database name)
+         * (Required)
+         *
+         * The elastic index (database name).
+         *
+         * @type {String}
          */
         index: {
             type: String
         },
 
         /**
-         * the type of the elasticsearch record to delete
+         * (Required)
+         *
+         * The type of the elasticsearch record to delete.
+         *
+         * @type {String}
          */
         elasticType: {
             type: String
         },
 
         /**
-         * _id of elasticsearch record to delete
+         * (Required)
+         *
+         * The _id of the elasticsearch record to delete.
+         *
+         * @type {String}
          */
         id: {
           type: String
         },
 
         /**
-         * result after a successful update, including current version number
+         * (Output)
          *
+         * Result after a successful delete including current version number.
+         *
+         * @type {Object}
+         * @default null
          */
         results: {
             type: Object,
@@ -83,7 +89,11 @@ Example:
         },
 
         /**
-         * either null or an error object that was returned from elastic search server.
+         * (Output)
+         *
+         * Either null or an error object that was returned from elastic search server.
+         *
+         * @type {Object}
          */
         lastError: {
             type: Object,
@@ -91,14 +101,18 @@ Example:
             readOnly: true
         }
     },
+
     observers: [
-        'delete(id, elasticType, client, index)'
+        '_delete(id, elasticType, client, index)'
     ],
+
     /**
-    * Perform delete on elasticsearch record based on inputs.
-    * Will set results or error property depending on outcome.
-    */
-    delete: function() {
+     * Perform delete on elasticsearch record based on inputs.
+     * Will set results or error property depending on outcome.
+     *
+     * @private
+     */
+    _delete: function() {
         var self = this;
 
         self.client.delete({
@@ -112,7 +126,5 @@ Example:
             self._setLastError(err);
         });
     }
-
   });
-
 </script>
