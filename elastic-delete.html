@@ -45,81 +45,81 @@ A Polymer Element providing a way to delete a single elasticsearch document base
     is: 'elastic-delete',
 
     properties: {
-        /**
-         * (Required)
-         *
-         * An instance of elasticsearch.Client which is connected to an elasticsearch server.
-         *
-         * @type {Object}
-         */
-        client: {
-            type: Object
-        },
+      /**
+       * (Required)
+       *
+       * An instance of elasticsearch.Client which is connected to an elasticsearch server.
+       *
+       * @type {Object}
+       */
+      client: {
+        type: Object
+      },
 
-        /**
-         * (Required)
-         *
-         * The elastic index (database name).
-         *
-         * @type {String}
-         */
-        index: {
-            type: String
-        },
+      /**
+       * (Required)
+       *
+       * The elastic index (database name).
+       *
+       * @type {String}
+       */
+      index: {
+        type: String
+      },
 
-        /**
-         * (Required)
-         *
-         * The type of the elasticsearch record to delete.
-         *
-         * @type {String}
-         */
-        elasticType: {
-            type: String
-        },
+      /**
+       * (Required)
+       *
+       * The type of the elasticsearch record to delete.
+       *
+       * @type {String}
+       */
+      elasticType: {
+        type: String
+      },
 
-        /**
-         * (Required)
-         *
-         * The _id of the elasticsearch record to delete.
-         *
-         * @type {String}
-         */
-        id: {
-          type: String
-        },
+      /**
+       * (Required)
+       *
+       * The _id of the elasticsearch record to delete.
+       *
+       * @type {String}
+       */
+      id: {
+        type: String
+      },
 
-        /**
-         * (Output)
-         *
-         * Result after a successful delete including current version number.
-         *
-         * @type {Object}
-         * @default null
-         */
-        results: {
-            type: Object,
-            notify: true,
-            readOnly: true,
-            value: null
-        },
+      /**
+       * (Output)
+       *
+       * Result after a successful delete including current version number.
+       *
+       * @type {Object}
+       * @default null
+       */
+      results: {
+        type: Object,
+        notify: true,
+        readOnly: true,
+        value: null
+      },
 
-        /**
-         * (Output)
-         *
-         * Either null or an error object that was returned from elastic search server.
-         *
-         * @type {Object}
-         */
-        lastError: {
-            type: Object,
-            notify: true,
-            readOnly: true
-        }
+      /**
+       * (Output)
+       *
+       * Either null or an error object that was returned from elastic search server.
+       *
+       * @type {Object}
+       */
+      lastError: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      }
     },
 
     observers: [
-        '_delete(id, elasticType, client, index)'
+      '_delete(id, elasticType, client, index)'
     ],
 
     /**
@@ -129,18 +129,18 @@ A Polymer Element providing a way to delete a single elasticsearch document base
      * @private
      */
     _delete: function() {
-        var self = this;
+      var self = this;
 
-        self.client.delete({
-            index: self.index,
-            id: self.id,
-            type: self.elasticType
-        }).then(function(results) {
-            self._setResults(results);
-            self._setLastError(null);
-        }).catch(function(err) {
-            self._setLastError(err);
-        });
+      self.client.delete({
+        index: self.index,
+        id: self.id,
+        type: self.elasticType
+      }).then(function(results) {
+        self._setResults(results);
+        self._setLastError(null);
+      }).catch(function(err) {
+        self._setLastError(err);
+      });
     }
   });
 </script>
