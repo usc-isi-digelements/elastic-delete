@@ -19,43 +19,46 @@ limitations under the License.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>elastic-delete Demo</title>
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
     <link rel="import" href="../../elastic-client/elastic-client.html">
     <link rel="import" href="../elastic-delete.html">
   </head>
   <body unresolved>
-    <template is="dom-bind" id="demo">
+    <dom-bind>
+      <script>
+        (function(document) {
+          var domBind = document.querySelector('dom-bind');
 
-      <p>ID of record to delete in mockads index: 4</p>
+          domBind.stringify = function(json) {
+            return JSON.stringify(json);
+          };
+        })(document);
+      </script>
+      <template is="dom-bind" id="demo">
 
-      <elastic-client
-        config='{"host": "http://localhost:9200"}'
-        client="{{esclient}}"
-        cluster-status="{{my-status}}">
-      </elastic-client>
+        <p>ID of record to delete in mockads index: 4</p>
 
-      <elastic-delete
-        client="[[esclient]]"
-        index="mockads"
-        id="4"
-        elastic-type="ad"
-        results="{{data}}"
-        lastError="{{error}}">
-      </elastic-delete>
+        <elastic-client
+          config='{"host": "http://localhost:9200"}'
+          client="{{esclient}}"
+          cluster-status="{{my-status}}">
+        </elastic-client>
+        <template is="dom-if" if=[[esclient]]>
+          <elastic-delete
+            client="[[esclient]]"
+            index="mockads"
+            id="4"
+            elastic-type="ad"
+            results="{{data}}"
+            lastError="{{error}}">
+          </elastic-delete>
 
-      <p>
-        Record info after delete (note that if demo was previously run, record might
-        already be deleted and the result here will be null): {{stringify(data)}}
-      </p>
-    </template>
-    <script>
-      (function(document) {
-        var demo = document.querySelector('#demo');
-
-        demo.stringify = function(json) {
-          return JSON.stringify(json);
-        };
-      })(document);
-    </script>
+          <p>
+            Record info after delete (note that if demo was previously run, record might
+            already be deleted and the result here will be null): {{stringify(data)}}
+          </p>
+        </template>
+      </template>
+    </dom-bind>
   </body>
 </html>
