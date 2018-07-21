@@ -12,14 +12,14 @@
     "elastic.js"
   ],
   "main": "elastic-delete.html",
-  "homepage": "https://github.com/DigElements/elastic-delete/",
+  "homepage": "https://github.com/usc-isi-digelements/elastic-delete/",
   "ignore": [
     "/.*",
     "/test/"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "elastic-client": "DigElements/elastic-client#^2.0.0"
+    "elastic-client": "usc-isi-digelements/elastic-client#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
